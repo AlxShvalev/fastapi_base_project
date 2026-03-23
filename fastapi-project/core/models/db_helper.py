@@ -42,9 +42,9 @@ class DatabaseHelper:
 
 
 db_helper = DatabaseHelper(
-    url=str(settings.database.database_url),
-    echo=settings.database.echo,
-    echo_pool=settings.database.echo_pool,
-    pool_size=settings.database.pool_size,
-    max_overflow=settings.database.max_overflow,
+    url=str(settings.db.database_url),
+    echo=settings.db.echo,
+    echo_pool=settings.db.echo_pool,
+    pool_size=settings.db.pool_size,
+    max_overflow=settings.db.max_overflow,
 )
