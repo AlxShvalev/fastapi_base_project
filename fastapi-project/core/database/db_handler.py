@@ -10,7 +10,7 @@ from sqlalchemy.ext.asyncio import (
 from core.config import settings
 
 
-class DatabaseHelper:
+class DatabaseHandler:
     def __init__(
         self,
         url: str,
@@ -39,9 +39,10 @@ class DatabaseHelper:
     async def get_session(self) -> AsyncGenerator[AsyncSession, None]:
         async with self.session_factory() as session:
             yield session
+            await session.close()
 
 
-db_helper = DatabaseHelper(
+db_handler = DatabaseHandler(
     url=str(settings.db.database_url),
     echo=settings.db.echo,
     echo_pool=settings.db.echo_pool,

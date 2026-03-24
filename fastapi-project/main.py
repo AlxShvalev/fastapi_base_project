@@ -6,7 +6,7 @@ from fastapi import FastAPI
 
 from api import router as api_router
 from core.config import settings
-from core.models import db_helper
+from core.database import db_handler
 
 
 @asynccontextmanager
@@ -14,7 +14,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator:
     # startapp
     yield
     # shutdown
-    await db_helper.dispose()
+    await db_handler.dispose()
 
 
 app = FastAPI(
