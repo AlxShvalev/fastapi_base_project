@@ -1,3 +1,4 @@
+from functools import lru_cache
 from pathlib import Path
 
 from pydantic import BaseModel, PostgresDsn
@@ -15,16 +16,31 @@ class ApiPrefix(BaseModel):
     prefix: str = "/api"
 
 
-class DatabaseSettings(BaseModel):
+class DatabaseSettings(BaseSettings):
+    model_config = SettingsConfigDict(
+        env_file=BASE_DIR / ".env",
+        env_prefix="DB_",
+        case_sensitive=False,
+        extra="ignore",
+    )
+
     host: str = "localhost"
     port: int = 5432
     user: str = "postgres"
-    password: str = "change.me"
+    password: str = ""
     name: str = "postgres"
     echo: bool = False
     echo_pool: bool = False
     pool_size: int = 10
     max_overflow: int = 10
+
+    naming_convention: dict[str, str] = {
+        "ix": "ix_%(column_0_label)s",
+        "uq": "uq_%(table_name)s_%(column_0_name)s",
+        "ck": "ck_%(table_name)s_%(constraint_name)s",
+        "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
+        "pk": "pk_%(table_name)s",
+    }
 
     @property
     def database_url(self):
@@ -49,7 +65,12 @@ class Settings(BaseSettings):
 
     run: RunConfig = RunConfig()
     api: ApiPrefix = ApiPrefix()
-    db: DatabaseSettings
+    db: DatabaseSettings = DatabaseSettings()
 
 
-settings = Settings()
+@lru_cache
+def get_settings():
+    return Settings()
+
+
+settings = get_settings()
