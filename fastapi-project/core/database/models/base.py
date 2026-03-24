@@ -1,5 +1,5 @@
 from sqlalchemy import MetaData
-from sqlalchemy.orm import DeclarativeBase, Mapped, declared_attr, mapped_column
+from sqlalchemy.orm import DeclarativeBase, declared_attr
 
 from core.config import settings
 
@@ -13,6 +13,5 @@ class BaseModel(DeclarativeBase):
 
     @declared_attr
     def __tablename__(cls) -> str:
-        return cls.__name__.lower()
-
-    id: Mapped[int] = mapped_column(primary_key=True)
+        name = cls.__name__.lower()
+        return f"{name}s"
