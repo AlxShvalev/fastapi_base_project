@@ -1,7 +1,7 @@
 from functools import lru_cache
 from pathlib import Path
 
-from pydantic import BaseModel, PostgresDsn
+from pydantic import BaseModel, PostgresDsn, RedisDsn
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -54,6 +54,37 @@ class DatabaseSettings(BaseSettings):
         )
 
 
+class RedisSettings(BaseSettings):
+    model_config = SettingsConfigDict(
+        env_file=BASE_DIR / ".env",
+        env_prefix="REDIS_",
+        case_sensitive=False,
+        extra="ignore",
+    )
+    host: str = "localhost"
+    port: int = 6379
+    username: str = "default"
+    password: str = "change.me"
+
+    @property
+    def redis_url(self):
+        return str(
+            RedisDsn.build(
+                host=self.host,
+                port=self.port,
+                username=self.username,
+                password=self.password,
+                scheme="redis",
+            )
+        )
+
+
+class AccessTokenSettings(BaseModel):
+    lifetime_seconds: int = 3600
+    reset_password_token_secret: str = ""
+    verification_token_secret: str = ""
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         case_sensitive=False,
@@ -66,6 +97,8 @@ class Settings(BaseSettings):
     run: RunConfig = RunConfig()
     api: ApiPrefix = ApiPrefix()
     db: DatabaseSettings = DatabaseSettings()
+    redis: RedisSettings = RedisSettings()
+    access_token: AccessTokenSettings
 
 
 @lru_cache
