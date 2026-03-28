@@ -20,5 +20,5 @@ class User(BaseModel, IntIdMixin, UpdatedAtMixin, SQLAlchemyBaseUserTable[UserId
     last_name: Mapped[str] = mapped_column(String(64), nullable=True)
 
     @classmethod
-    async def get_db(cls, session: "AsyncSession"):
-        yield SQLAlchemyUserDatabase(session, cls)
+    def get_db(cls, session: "AsyncSession"):
+        return SQLAlchemyUserDatabase(session, cls)
