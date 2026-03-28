@@ -1,0 +1,10 @@
+from fastapi_users.authentication import AuthenticationBackend
+
+from core.auth.transport import bearer_transport
+from .strategy import get_redis_strategy
+
+authentication_backend = AuthenticationBackend(
+    name="redis",
+    transport=bearer_transport,
+    get_strategy=get_redis_strategy,
+)
