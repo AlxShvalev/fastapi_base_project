@@ -8,8 +8,9 @@ class UserCreate(schemas.BaseUserCreate):
     last_name: str | None
 
 
-class UserRead(UserCreate, schemas.BaseUser[UserIdType]):
-    pass
+class UserRead(schemas.BaseUser[UserIdType]):
+    first_name: str | None
+    last_name: str | None
 
 
 class UserUpdate(UserCreate, schemas.BaseUserUpdate):
