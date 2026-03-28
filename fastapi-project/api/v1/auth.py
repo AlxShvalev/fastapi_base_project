@@ -18,12 +18,12 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 
 router.include_router(
     fastapi_users.get_auth_router(authentication_backend),
-    prefix="/auth/jwt",
+    prefix="/jwt",
     tags=["auth"],
 )
 
 router.include_router(
     fastapi_users.get_register_router(UserRead, UserCreate),
-    prefix="/auth",
+    prefix="",
     tags=["auth"],
 )
