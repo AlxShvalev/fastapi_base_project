@@ -7,11 +7,14 @@ from api.dependencies.authentication.fastapi_users_dependencies import fastapi_u
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
 router.include_router(
-    fastapi_users.get_auth_router(authentication_backend),
-    prefix="/jwt",
+    router=fastapi_users.get_auth_router(
+        authentication_backend,
+    ),
 )
 
 router.include_router(
-    fastapi_users.get_register_router(UserRead, UserCreate),
-    prefix="",
+    router=fastapi_users.get_register_router(
+        UserRead,
+        UserCreate,
+    ),
 )
