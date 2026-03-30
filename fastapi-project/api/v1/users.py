@@ -12,3 +12,11 @@ router.include_router(
         UserUpdate,
     ),
 )
+
+router.include_router(
+    router=fastapi_users.get_verify_router(UserRead),
+)
+
+router.include_router(
+    router=fastapi_users.get_reset_password_router(),
+)
